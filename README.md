@@ -1,50 +1,35 @@
-# Welcome to your Expo app 👋
+# DEMIF - English Learning App 🚀
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**DEMIF** là ứng dụng học tiếng Anh thông minh, tập trung vào phương pháp **Shadowing** (Nói nhại) và **Dictation** (Nghe chép), tích hợp AI để đánh giá phát âm và cá nhân hóa lộ trình học tập.
 
-## Get started
+![Project Banner](https://via.placeholder.com/800x200?text=DEMIF+App+Banner)
 
-1. Install dependencies
+## ✨ Tính năng chính (Features)
 
-   ```bash
-   npm install
-   ```
+* **📱 Onboarding thông minh:** Cá nhân hóa lộ trình dựa trên sở thích và mục tiêu của người dùng.
+* **🎙️ Luyện tập (Practice Mode):**
+    * **Shadowing:** Luyện nói theo giọng bản xứ với visualizer sóng âm.
+    * **Dictation:** Luyện nghe chép chính tả.
+    * **Ghi âm & Playback:** Thu âm và nghe lại giọng nói của chính mình.
+* **📊 Thống kê (Stats):** Theo dõi tiến độ, Streak (chuỗi ngày học), biểu đồ hoạt động tuần và phân tích kỹ năng (Phát âm, Ngữ điệu, Lưu loát).
+* **🏆 Bảng xếp hạng (Ranking):** Đua top với giao diện Podium 3D hiện đại.
+* **💎 Gói thành viên (Upgrade Pro):** Màn hình nâng cấp tài khoản giao diện Modal/Bottom Sheet mượt mà.
+* **👤 Hồ sơ (Profile):** Quản lý thông tin, cài đặt, và trạng thái tài khoản.
 
-2. Start the app
+## 🛠️ Công nghệ sử dụng (Tech Stack)
 
-   ```bash
-   npx expo start
-   ```
+* **Core:** [React Native](https://reactnative.dev/), [Expo SDK 52](https://expo.dev/).
+* **Routing:** [Expo Router](https://docs.expo.dev/router/introduction) (File-based routing).
+* **Styling:** [NativeWind (Tailwind CSS)](https://www.nativewind.dev/) - Modern Orange Theme 🎨.
+* **Animations:** [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/).
+* **Icons:** [Lucide React Native](https://lucide.dev/).
+* **Storage:** Async Storage (Lưu trạng thái Onboarding/Login).
+* **Audio:** Expo AV / Audio Recorder Hook.
 
-In the output, you'll find options to open the app in a
+## 🚀 Cài đặt & Chạy dự án
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 1. Cài đặt dependencies
+Đảm bảo bạn đã cài đặt Node.js. Sau đó chạy lệnh:
 
 ```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+npm install
