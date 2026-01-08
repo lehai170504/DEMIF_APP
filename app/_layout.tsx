@@ -1,17 +1,15 @@
-// 1. QUAN TRỌNG: Reanimated phải luôn nằm dòng đầu tiên
 import "react-native-reanimated";
+import "../src/global.css";
 
-// 2. CSS và các thư viện khác
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRootNavigationState, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
-import "../src/global.css";
+import { ActivityIndicator, useColorScheme, View } from "react-native";
 
 export const unstable_settings = {
   initialRouteName: "onboarding",
@@ -21,26 +19,32 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      router.replace("/onboarding");
-    }, 100);
+  const rootNavigationState = useRootNavigationState();
 
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => {
+    if (!rootNavigationState?.key) return;
+
+    router.replace("/onboarding");
+  }, [rootNavigationState?.key]);
+
+  if (!rootNavigationState?.key) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#F97316" />
+      </View>
+    );
+  }
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        {/* Đưa Onboarding lên đầu tiên trong Stack để dễ quản lý */}
+        {/* Màn hình Onboarding */}
         <Stack.Screen
           name="onboarding"
-          options={{
-            headerShown: false,
-            animation: "fade",
-          }}
+          options={{ headerShown: false, animation: "fade" }}
         />
 
+        {/* Các luồng chính */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
@@ -53,7 +57,6 @@ export default function RootLayout() {
             gestureEnabled: true,
           }}
         />
-
         <Stack.Screen
           name="result/[id]"
           options={{
@@ -64,6 +67,7 @@ export default function RootLayout() {
           }}
         />
 
+        {/* Màn hình Nâng cấp (Modal) */}
         <Stack.Screen
           name="upgrade"
           options={{
@@ -76,6 +80,9 @@ export default function RootLayout() {
           }}
         />
 
+        <Stack.Screen name="settings" options={{ headerShown: false }} />
+
+        {/* Màn hình 404 */}
         <Stack.Screen name="+not-found" options={{ title: "Oops!" }} />
       </Stack>
 

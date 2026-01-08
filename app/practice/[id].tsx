@@ -3,27 +3,27 @@ import { cn } from "@/src/lib/utils";
 import { Audio } from "expo-av";
 import { Stack, useRouter } from "expo-router";
 import {
-    ArrowLeft,
-    CheckCircle,
-    Mic,
-    MoreHorizontal,
-    Pause,
-    Play,
-    RotateCcw,
-    Save,
-    Volume2,
+  ArrowLeft,
+  CheckCircle,
+  Mic,
+  MoreHorizontal,
+  Pause,
+  Play,
+  RotateCcw,
+  Save,
+  Volume2,
 } from "lucide-react-native";
 import React, { useState } from "react";
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StatusBar,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function PracticeScreen() {
@@ -184,7 +184,10 @@ export default function PracticeScreen() {
               <TouchableOpacity className="bg-slate-50 border border-slate-100 px-5 py-4 rounded-[20px] items-center justify-center active:bg-slate-100">
                 <Save size={22} color="#64748B" />
               </TouchableOpacity>
-              <TouchableOpacity className="bg-orange-500 flex-1 flex-row items-center justify-center px-5 py-4 rounded-[20px] shadow-lg shadow-orange-200 active:bg-orange-600 border-b-4 border-orange-600 active:border-b-0 active:translate-y-1">
+              <TouchableOpacity
+                onPress={() => router.push("/result/1")}
+                className="bg-orange-500 flex-1 flex-row items-center justify-center px-5 py-4 rounded-[20px] shadow-lg shadow-orange-200 active:bg-orange-600 border-b-4 border-orange-600 active:border-b-0 active:translate-y-1"
+              >
                 <CheckCircle size={20} color="white" />
                 <Text className="text-white font-bold ml-2 text-base">
                   Kiểm tra kết quả
