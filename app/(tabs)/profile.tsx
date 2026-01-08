@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"; // <-- Đã thêm import này
 import { useRouter } from "expo-router";
 import {
   Bell,
@@ -11,6 +10,7 @@ import {
 } from "lucide-react-native";
 import React, { useState } from "react";
 import {
+  Alert,
   Image,
   ScrollView,
   StatusBar,
@@ -22,23 +22,61 @@ import {
 export default function ProfileScreen() {
   const router = useRouter();
 
-  // --- GIẢ LẬP TRẠNG THÁI ---
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // --- GIẢ LẬP TRẠNG THÁI (Sau này lấy từ Context/Redux) ---
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Để true test cho dễ
 
+  // 1. Cấu hình Menu có thêm đường dẫn (route)
   const MENU_ITEMS = [
-    { icon: <User size={20} color="#64748B" />, label: "Thông tin cá nhân" },
-    { icon: <Bell size={20} color="#64748B" />, label: "Thông báo nhắc nhở" },
+    {
+      icon: <User size={20} color="#64748B" />,
+      label: "Thông tin cá nhân",
+      route: "/settings/account", // Đường dẫn file
+      requireAuth: true, // Cờ đánh dấu cần đăng nhập mới vào được
+    },
+    {
+      icon: <Bell size={20} color="#64748B" />,
+      label: "Thông báo nhắc nhở",
+      route: "/settings/notifications",
+    },
     {
       icon: <Globe size={20} color="#64748B" />,
       label: "Ngôn ngữ hiển thị",
       value: "Tiếng Việt",
+      route: "/settings/language",
     },
-    { icon: <Shield size={20} color="#64748B" />, label: "Chính sách bảo mật" },
+    {
+      icon: <Shield size={20} color="#64748B" />,
+      label: "Chính sách bảo mật",
+      route: "/settings/privacy",
+    },
   ];
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     router.replace("/(auth)/login");
+  };
+
+  // 2. Hàm xử lý khi nhấn vào Menu
+  const handleMenuPress = (item: any) => {
+    // Nếu mục này yêu cầu đăng nhập mà chưa đăng nhập -> Chuyển sang Login
+    if (item.requireAuth && !isLoggedIn) {
+      Alert.alert(
+        "Yêu cầu đăng nhập",
+        "Vui lòng đăng nhập để truy cập tính năng này.",
+        [
+          { text: "Hủy", style: "cancel" },
+          { text: "Đăng nhập", onPress: () => router.push("/(auth)/login") },
+        ]
+      );
+      return;
+    }
+
+    // Nếu có đường dẫn thì chuyển trang
+    if (item.route) {
+      router.push(item.route);
+    } else {
+      Alert.alert("Thông báo", "Tính năng đang phát triển!");
+    }
   };
 
   return (
@@ -59,7 +97,7 @@ export default function ProfileScreen() {
               />
               <View className="absolute bottom-0 right-0 bg-slate-200 px-2 py-0.5 rounded-full border-2 border-white">
                 <Text className="text-slate-600 text-[10px] font-bold">
-                  FREE
+                  PRO
                 </Text>
               </View>
             </View>
@@ -70,7 +108,10 @@ export default function ProfileScreen() {
               <Text className="text-slate-500 font-medium">
                 alex.nguyen@example.com
               </Text>
-              <TouchableOpacity className="mt-2 bg-white px-3 py-1.5 rounded-full self-start border border-slate-200 shadow-sm">
+              <TouchableOpacity
+                onPress={() => router.push("/settings/account")} // Sửa nút này luôn
+                className="mt-2 bg-white px-3 py-1.5 rounded-full self-start border border-slate-200 shadow-sm"
+              >
                 <Text className="text-xs font-bold text-slate-600">
                   Chỉnh sửa hồ sơ
                 </Text>
@@ -112,7 +153,7 @@ export default function ProfileScreen() {
         )}
       </View>
 
-      {/* --- PHẦN 2: STATS SUMMARY (Chỉ hiện khi đã Login) --- */}
+      {/* --- PHẦN 2: STATS SUMMARY --- */}
       {isLoggedIn && (
         <View className="px-6 mb-6">
           <View className="bg-slate-900 p-4 rounded-2xl flex-row justify-around">
@@ -163,7 +204,7 @@ export default function ProfileScreen() {
           {MENU_ITEMS.map((item, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => !isLoggedIn && router.push("/(auth)/login")}
+              onPress={() => handleMenuPress(item)} // Gọi hàm xử lý
               className={`flex-row items-center justify-between p-4 ${
                 index !== MENU_ITEMS.length - 1
                   ? "border-b border-slate-50"
@@ -191,9 +232,9 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* --- PHẦN 5: ACTION BUTTONS --- */}
+      {/* --- FOOTER --- */}
       <View className="px-6 pb-32">
-        {isLoggedIn ? (
+        {isLoggedIn && (
           <TouchableOpacity
             onPress={handleLogout}
             className="flex-row items-center justify-center p-4 rounded-2xl border border-red-100 bg-red-50 active:bg-red-100 transition-all"
@@ -201,30 +242,11 @@ export default function ProfileScreen() {
             <LogOut size={20} color="#EF4444" />
             <Text className="text-red-500 font-bold ml-2">Đăng xuất</Text>
           </TouchableOpacity>
-        ) : (
-          <View className="gap-4">
-            <Text className="text-center text-slate-400 text-xs">
-              Đăng nhập để đồng bộ dữ liệu trên mọi thiết bị.
-            </Text>
-          </View>
         )}
 
         <Text className="text-center text-slate-400 text-xs mt-6">
           Version 1.0.2 (Build 2024)
         </Text>
-
-        {/* --- NÚT RESET ONBOARDING (DEV ONLY) --- */}
-        <TouchableOpacity
-          onPress={async () => {
-            await AsyncStorage.removeItem("hasLaunched");
-            alert("Đã reset! Hãy reload app.");
-          }}
-          className="mt-4 self-center p-2 opacity-50 active:opacity-100"
-        >
-          <Text className="text-red-400 text-[10px] font-bold uppercase tracking-wider">
-            [DEV] Reset Onboarding
-          </Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );
