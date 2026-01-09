@@ -2,7 +2,20 @@ import { Tabs } from "expo-router";
 import { House, LayoutGrid, PieChart, Trophy, User } from "lucide-react-native";
 import { Platform, View } from "react-native";
 
+// 1. IMPORT HOOK LẤY MÀU
+import { useAppTheme } from "@/src/context/ThemeContext";
+
 export default function TabLayout() {
+  // 2. LẤY TRẠNG THÁI MÀU (Dark/Light)
+  const { colorScheme } = useAppTheme();
+  const isDark = colorScheme === "dark";
+
+  // Định nghĩa màu nền TabBar (Trắng hoặc Slate-900)
+  const tabBarBg = isDark ? "#0F172A" : "#ffffff";
+
+  // Định nghĩa màu viền nút Home (Trùng màu nền TabBar)
+  const homeButtonBorder = isDark ? "#0F172A" : "#ffffff";
+
   return (
     <Tabs
       screenOptions={{
@@ -13,8 +26,9 @@ export default function TabLayout() {
           bottom: 0,
           left: 0,
           right: 0,
-          backgroundColor: "#ffffff",
-          borderTopWidth: 0,
+          // 3. ÁP DỤNG MÀU NỀN ĐỘNG
+          backgroundColor: tabBarBg,
+          borderTopWidth: 0, // Bỏ viền trên cho đẹp
           elevation: 10,
           shadowColor: "#000",
           shadowOffset: { width: 0, height: -4 },
@@ -23,11 +37,11 @@ export default function TabLayout() {
           height: Platform.OS === "ios" ? 85 : 70,
           paddingTop: 10,
         },
-        tabBarActiveTintColor: "#F97316",
-        tabBarInactiveTintColor: "#94A3B8",
+        tabBarActiveTintColor: "#F97316", // Màu cam giữ nguyên
+        tabBarInactiveTintColor: isDark ? "#64748B" : "#94A3B8", // Màu icon khi tắt (tối đi chút cho dịu)
       }}
     >
-      {/* 1. Library (Trái ngoài cùng) */}
+      {/* 1. Library */}
       <Tabs.Screen
         name="library"
         options={{
@@ -46,7 +60,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 2. Ranking / Leaderboard (Trái trong cùng) - MỚI */}
+      {/* 2. Ranking */}
       <Tabs.Screen
         name="ranking"
         options={{
@@ -61,14 +75,14 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 3. Home (Giữa - Nổi bật) */}
+      {/* 3. Home (CẦN SỬA VIỀN) */}
       <Tabs.Screen
         name="index"
         options={{
           tabBarIcon: ({ focused }) => (
             <View
               style={{
-                top: -25, // Đẩy lên tạo hiệu ứng nổi
+                top: -25,
                 width: 60,
                 height: 60,
                 borderRadius: 30,
@@ -81,7 +95,8 @@ export default function TabLayout() {
                 shadowRadius: 10,
                 elevation: 10,
                 borderWidth: 4,
-                borderColor: "#ffffff",
+                // 4. ÁP DỤNG MÀU VIỀN ĐỘNG (Để nó hòa vào nền Tabbar)
+                borderColor: homeButtonBorder,
               }}
             >
               <House
@@ -94,7 +109,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 4. Stats (Phải trong cùng) */}
+      {/* 4. Stats */}
       <Tabs.Screen
         name="stats"
         options={{
@@ -113,7 +128,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* 5. Profile (Phải ngoài cùng) */}
+      {/* 5. Profile */}
       <Tabs.Screen
         name="profile"
         options={{

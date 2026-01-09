@@ -31,15 +31,16 @@ export const TimePickerModal = ({
       statusBarTranslucent
     >
       <View className="flex-1 bg-black/50 justify-center items-center px-6">
-        <View className="bg-white w-full rounded-3xl p-6 shadow-2xl">
-          <Text className="text-center text-lg font-black text-slate-800 mb-6">
+        {/* Modal Container: dark:bg-slate-800 */}
+        <View className="bg-white dark:bg-slate-800 w-full rounded-3xl p-6 shadow-2xl">
+          <Text className="text-center text-lg font-black text-slate-800 dark:text-white mb-6">
             Chọn giờ nhắc nhở
           </Text>
 
           <View className="flex-row justify-center h-48 mb-6">
             {/* Cột Giờ */}
             <View className="w-20 items-center">
-              <Text className="text-xs font-bold text-slate-400 mb-2 uppercase">
+              <Text className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-2 uppercase">
                 Giờ
               </Text>
               <FlatList
@@ -56,14 +57,16 @@ export const TimePickerModal = ({
                   <TouchableOpacity
                     onPress={() => setTempHour(item)}
                     className={`h-10 items-center justify-center w-full rounded-lg ${
-                      tempHour === item ? "bg-orange-50" : ""
+                      tempHour === item
+                        ? "bg-orange-50 dark:bg-orange-900/20"
+                        : ""
                     }`}
                   >
                     <Text
                       className={`text-xl ${
                         tempHour === item
-                          ? "font-black text-orange-600"
-                          : "font-medium text-slate-400"
+                          ? "font-black text-orange-600 dark:text-orange-400"
+                          : "font-medium text-slate-400 dark:text-slate-600"
                       }`}
                     >
                       {item < 10 ? `0${item}` : item}
@@ -74,12 +77,14 @@ export const TimePickerModal = ({
             </View>
 
             <View className="h-full justify-center pb-6 mx-4">
-              <Text className="text-2xl font-black text-slate-300">:</Text>
+              <Text className="text-2xl font-black text-slate-300 dark:text-slate-600">
+                :
+              </Text>
             </View>
 
             {/* Cột Phút */}
             <View className="w-20 items-center">
-              <Text className="text-xs font-bold text-slate-400 mb-2 uppercase">
+              <Text className="text-xs font-bold text-slate-400 dark:text-slate-500 mb-2 uppercase">
                 Phút
               </Text>
               <FlatList
@@ -96,14 +101,16 @@ export const TimePickerModal = ({
                   <TouchableOpacity
                     onPress={() => setTempMinute(item)}
                     className={`h-10 items-center justify-center w-full rounded-lg ${
-                      tempMinute === item ? "bg-orange-50" : ""
+                      tempMinute === item
+                        ? "bg-orange-50 dark:bg-orange-900/20"
+                        : ""
                     }`}
                   >
                     <Text
                       className={`text-xl ${
                         tempMinute === item
-                          ? "font-black text-orange-600"
-                          : "font-medium text-slate-400"
+                          ? "font-black text-orange-600 dark:text-orange-400"
+                          : "font-medium text-slate-400 dark:text-slate-600"
                       }`}
                     >
                       {item < 10 ? `0${item}` : item}
@@ -117,13 +124,15 @@ export const TimePickerModal = ({
           <View className="flex-row gap-3">
             <TouchableOpacity
               onPress={onClose}
-              className="flex-1 bg-slate-100 py-3.5 rounded-xl items-center"
+              className="flex-1 bg-slate-100 dark:bg-slate-700 py-3.5 rounded-xl items-center"
             >
-              <Text className="font-bold text-slate-600">Hủy</Text>
+              <Text className="font-bold text-slate-600 dark:text-slate-300">
+                Hủy
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={onSave}
-              className="flex-1 bg-orange-500 py-3.5 rounded-xl items-center shadow-lg shadow-orange-200"
+              className="flex-1 bg-orange-500 py-3.5 rounded-xl items-center shadow-lg shadow-orange-200 dark:shadow-none"
             >
               <Text className="font-bold text-white">Lưu giờ</Text>
             </TouchableOpacity>

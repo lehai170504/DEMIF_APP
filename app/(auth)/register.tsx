@@ -22,8 +22,16 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// 1. IMPORT HOOK LẤY MÀU
+import { useAppTheme } from "@/src/context/ThemeContext";
+
 export default function RegisterScreen() {
   const router = useRouter();
+
+  // 2. LẤY TRẠNG THÁI THEME
+  const { colorScheme } = useAppTheme();
+  const isDark = colorScheme === "dark";
+  const inputIconColor = "#94A3B8"; // Màu icon input (Slate-400)
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -40,12 +48,14 @@ export default function RegisterScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-50">
-      <StatusBar style="dark" />
+    // Nền chính: dark:bg-slate-900
+    <View className="flex-1 bg-slate-50 dark:bg-slate-900">
+      <StatusBar style="light" />
 
-      {/* 1. Header Decoration (Đồng bộ với Login) */}
-      <View className="absolute top-0 left-0 right-0 h-64 bg-slate-900 rounded-b-[40px] shadow-lg shadow-slate-400 z-0 overflow-hidden">
-        {/* Decorative Circles (Dark Theme Style) */}
+      {/* 1. Header Decoration */}
+      {/* Light: Slate-900 | Dark: Slate-950 (Đậm hơn nền chính để tạo chiều sâu) */}
+      <View className="absolute top-0 left-0 right-0 h-64 bg-slate-900 dark:bg-slate-950 rounded-b-[40px] shadow-lg shadow-slate-400 dark:shadow-none z-0 overflow-hidden">
+        {/* Decorative Circles */}
         <View className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full blur-2xl" />
         <View className="absolute top-20 -left-10 w-32 h-32 bg-white/5 rounded-full blur-2xl" />
       </View>
@@ -78,42 +88,45 @@ export default function RegisterScreen() {
             </View>
 
             {/* 2. Register Card Container */}
-            <View className="bg-white p-6 rounded-[32px] shadow-xl shadow-slate-200/50 border border-slate-100">
+            {/* Card: dark:bg-slate-800 dark:border-slate-700 */}
+            <View className="bg-white dark:bg-slate-800 p-6 rounded-[32px] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
               {/* Inputs Group */}
               <View className="space-y-5 mb-6">
                 {/* Full Name Input */}
                 <View>
-                  <Text className="text-slate-500 text-xs font-bold uppercase ml-1 mb-2">
+                  <Text className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase ml-1 mb-2">
                     Tên hiển thị
                   </Text>
-                  <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl h-14 px-4 focus:border-slate-800 focus:bg-white transition-all">
-                    <User size={20} color="#94A3B8" className="mr-3" />
+                  {/* Input Container: dark:bg-slate-900 dark:border-slate-700 */}
+                  <View className="flex-row items-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl h-14 px-4 focus:border-slate-800 dark:focus:border-slate-500 focus:bg-white dark:focus:bg-slate-900 transition-all">
+                    <User size={20} color={inputIconColor} className="mr-3" />
                     <TextInput
                       placeholder="Alex Nguyen"
                       placeholderTextColor="#94A3B8"
-                      className="flex-1 font-semibold text-slate-800 h-full text-base"
+                      // Input Text: dark:text-white
+                      className="flex-1 font-semibold text-slate-800 dark:text-white h-full text-base"
                       value={fullName}
                       onChangeText={setFullName}
-                      cursorColor="#1E293B"
+                      cursorColor={isDark ? "#FFFFFF" : "#1E293B"}
                     />
                   </View>
                 </View>
 
                 {/* Email Input */}
                 <View>
-                  <Text className="text-slate-500 text-xs font-bold uppercase ml-1 mb-2">
+                  <Text className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase ml-1 mb-2">
                     Email
                   </Text>
-                  <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl h-14 px-4 focus:border-slate-800 focus:bg-white transition-all">
-                    <Mail size={20} color="#94A3B8" className="mr-3" />
+                  <View className="flex-row items-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl h-14 px-4 focus:border-slate-800 dark:focus:border-slate-500 focus:bg-white dark:focus:bg-slate-900 transition-all">
+                    <Mail size={20} color={inputIconColor} className="mr-3" />
                     <TextInput
                       placeholder="name@email.com"
                       placeholderTextColor="#94A3B8"
-                      className="flex-1 font-semibold text-slate-800 h-full text-base"
+                      className="flex-1 font-semibold text-slate-800 dark:text-white h-full text-base"
                       value={email}
                       onChangeText={setEmail}
                       autoCapitalize="none"
-                      cursorColor="#1E293B"
+                      cursorColor={isDark ? "#FFFFFF" : "#1E293B"}
                       keyboardType="email-address"
                     />
                   </View>
@@ -121,61 +134,69 @@ export default function RegisterScreen() {
 
                 {/* Password Input */}
                 <View>
-                  <Text className="text-slate-500 text-xs font-bold uppercase ml-1 mb-2">
+                  <Text className="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase ml-1 mb-2">
                     Mật khẩu
                   </Text>
-                  <View className="flex-row items-center bg-slate-50 border border-slate-200 rounded-2xl h-14 px-4 focus:border-slate-800 focus:bg-white transition-all">
-                    <Lock size={20} color="#94A3B8" className="mr-3" />
+                  <View className="flex-row items-center bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl h-14 px-4 focus:border-slate-800 dark:focus:border-slate-500 focus:bg-white dark:focus:bg-slate-900 transition-all">
+                    <Lock size={20} color={inputIconColor} className="mr-3" />
                     <TextInput
                       placeholder="Ít nhất 6 ký tự"
                       placeholderTextColor="#94A3B8"
-                      className="flex-1 font-semibold text-slate-800 h-full text-base"
+                      className="flex-1 font-semibold text-slate-800 dark:text-white h-full text-base"
                       value={password}
                       onChangeText={setPassword}
                       secureTextEntry={!showPassword}
                       autoCapitalize="none"
-                      cursorColor="#1E293B"
+                      cursorColor={isDark ? "#FFFFFF" : "#1E293B"}
                     />
                     <TouchableOpacity
                       onPress={() => setShowPassword(!showPassword)}
                       className="p-2"
                     >
                       {showPassword ? (
-                        <EyeOff size={20} color="#94A3B8" />
+                        <EyeOff size={20} color={inputIconColor} />
                       ) : (
-                        <Eye size={20} color="#94A3B8" />
+                        <Eye size={20} color={inputIconColor} />
                       )}
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
 
-              {/* Main Action Button (Dark Theme for Register) */}
+              {/* Main Action Button (Inverted Color for Dark Mode) */}
               <TouchableOpacity
                 onPress={handleRegister}
                 disabled={isLoading}
                 className={cn(
-                  "w-full h-14 bg-slate-900 rounded-2xl flex-row items-center justify-center shadow-lg shadow-slate-300 mb-6 active:scale-[0.98] transition-all",
+                  // Light: bg-slate-900 | Dark: bg-white (High Contrast)
+                  "w-full h-14 bg-slate-900 dark:bg-white rounded-2xl flex-row items-center justify-center shadow-lg shadow-slate-300 dark:shadow-none mb-6 active:scale-[0.98] transition-all",
                   isLoading ? "opacity-70" : "opacity-100"
                 )}
               >
                 {isLoading ? (
-                  <View className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <View className="w-6 h-6 border-2 border-white dark:border-slate-900 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <>
-                    <Text className="text-white font-bold text-lg mr-2">
+                    <Text className="text-white dark:text-slate-900 font-bold text-lg mr-2">
                       Tạo tài khoản
                     </Text>
-                    <ChevronRight size={20} color="white" strokeWidth={2.5} />
+                    <ChevronRight
+                      size={20}
+                      color={isDark ? "#0F172A" : "white"}
+                      strokeWidth={2.5}
+                    />
                   </>
                 )}
               </TouchableOpacity>
 
               {/* Terms */}
-              <Text className="text-center text-slate-400 text-xs px-2 leading-5 mb-2">
+              <Text className="text-center text-slate-400 dark:text-slate-500 text-xs px-2 leading-5 mb-2">
                 Bằng việc đăng ký, bạn đồng ý với{" "}
-                <Text className="text-slate-900 font-bold">Điều khoản</Text> &{" "}
-                <Text className="text-slate-900 font-bold">
+                <Text className="text-slate-900 dark:text-white font-bold">
+                  Điều khoản
+                </Text>{" "}
+                &{" "}
+                <Text className="text-slate-900 dark:text-white font-bold">
                   Chính sách bảo mật
                 </Text>
                 .
@@ -185,21 +206,23 @@ export default function RegisterScreen() {
             {/* Social Login (Compact) */}
             <View className="mt-8 mb-4">
               <View className="flex-row items-center mb-6">
-                <View className="flex-1 h-[1px] bg-slate-200" />
-                <Text className="mx-4 text-slate-400 font-bold text-xs">
+                <View className="flex-1 h-[1px] bg-slate-200 dark:bg-slate-800" />
+                <Text className="mx-4 text-slate-400 dark:text-slate-500 font-bold text-xs">
                   HOẶC ĐĂNG KÝ VỚI
                 </Text>
-                <View className="flex-1 h-[1px] bg-slate-200" />
+                <View className="flex-1 h-[1px] bg-slate-200 dark:bg-slate-800" />
               </View>
 
               <View className="flex-row gap-4 justify-center">
-                <TouchableOpacity className="w-14 h-14 bg-white border border-slate-200 rounded-2xl items-center justify-center shadow-sm active:bg-slate-50">
+                {/* Google */}
+                <TouchableOpacity className="w-14 h-14 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl items-center justify-center shadow-sm dark:shadow-none active:bg-slate-50 dark:active:bg-slate-700">
                   <View className="w-6 h-6 rounded-full bg-red-500 items-center justify-center">
                     <Text className="text-white font-bold text-[10px]">G</Text>
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity className="w-14 h-14 bg-white border border-slate-200 rounded-2xl items-center justify-center shadow-sm active:bg-slate-50">
+                {/* Apple */}
+                <TouchableOpacity className="w-14 h-14 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl items-center justify-center shadow-sm dark:shadow-none active:bg-slate-50 dark:active:bg-slate-700">
                   <View className="w-6 h-6 rounded-full bg-black items-center justify-center">
                     <Text className="text-white font-bold text-[10px]">A</Text>
                   </View>
@@ -209,11 +232,11 @@ export default function RegisterScreen() {
 
             {/* Footer */}
             <View className="flex-row justify-center items-center pb-8">
-              <Text className="text-slate-500 font-medium">
+              <Text className="text-slate-500 dark:text-slate-400 font-medium">
                 Đã có tài khoản?{" "}
               </Text>
               <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
-                <Text className="text-slate-900 font-bold underline decoration-slate-300">
+                <Text className="text-slate-900 dark:text-white font-bold underline decoration-slate-300 dark:decoration-slate-500">
                   Đăng nhập
                 </Text>
               </TouchableOpacity>

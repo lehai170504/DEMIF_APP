@@ -1,50 +1,42 @@
+// 1. QUAN TRỌNG: Reanimated phải luôn nằm dòng đầu tiên
 import "react-native-reanimated";
 import "../src/global.css";
 
+// Đổi tên ThemeProvider của Navigation thành NavThemeProvider để đỡ trùng tên
 import {
   DarkTheme,
   DefaultTheme,
-  ThemeProvider,
+  ThemeProvider as NavThemeProvider,
 } from "@react-navigation/native";
 import { Stack, useRootNavigationState, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { ActivityIndicator, useColorScheme, View } from "react-native";
+
+// 👇 IMPORT CONTEXT THEME BẠN VỪA TẠO
+import { ThemeProvider, useAppTheme } from "@/src/context/ThemeContext";
 
 export const unstable_settings = {
   initialRouteName: "onboarding",
 };
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+function AppLayout() {
   const router = useRouter();
+
+  const { colorScheme } = useAppTheme();
 
   const rootNavigationState = useRootNavigationState();
 
   useEffect(() => {
     if (!rootNavigationState?.key) return;
-
-    router.replace("/onboarding");
   }, [rootNavigationState?.key]);
 
-  if (!rootNavigationState?.key) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#F97316" />
-      </View>
-    );
-  }
-
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <NavThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        {/* Màn hình Onboarding */}
         <Stack.Screen
           name="onboarding"
           options={{ headerShown: false, animation: "fade" }}
         />
-
-        {/* Các luồng chính */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
@@ -66,8 +58,6 @@ export default function RootLayout() {
             gestureEnabled: true,
           }}
         />
-
-        {/* Màn hình Nâng cấp (Modal) */}
         <Stack.Screen
           name="upgrade"
           options={{
@@ -81,12 +71,19 @@ export default function RootLayout() {
         />
 
         <Stack.Screen name="settings" options={{ headerShown: false }} />
-
-        {/* Màn hình 404 */}
         <Stack.Screen name="+not-found" options={{ title: "Oops!" }} />
       </Stack>
 
       <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
+    </NavThemeProvider>
+  );
+}
+
+// --- COMPONENT CHA: Chỉ nhiệm vụ bọc Provider ---
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <AppLayout />
     </ThemeProvider>
   );
 }
